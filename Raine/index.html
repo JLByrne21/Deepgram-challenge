@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <p></p>
+    <script>
+        // Different dictionaries for different purposes
+        symbols = { 'equals to': '=', 'equals': '=', 'equal': '=', 'plus': '+', 'minus': '-', 'times': '* ', 'divide': '/' }
+        brackets = { 'open bracket': '(', 'closed bracket': ')' }
+        greeks = {
+            'alpha': 'α',
+            'beta': 'β',
+            'gamma': 'γ',
+            'delta': 'δ',
+            'epsilon': 'ε',
+            'zeta': 'ζ',
+            'eta': 'η',
+            'theta': 'θ',
+            'iota': 'ι',
+            'kappa': 'κ',
+            'lambda': 'λ',
+            'mu': 'μ',
+            'nu': 'ν',
+            'xi': 'ξ',
+            'omicron': 'ο',
+            'pi': 'π',
+            'rho': 'ρ',
+            'sigma': 'σ',
+            'tau': 'τ',
+            'upsilon': 'υ',
+            'phi': 'φ',
+            'chi': 'χ',
+            'psi': 'ψ',
+            'omega': 'ω'
+        };
+
+        // List of dictionaries
+        dictionaries = [symbols, brackets, greeks]
+
+        function speechReplace(transcript, dictionaries) {
+            // Iterate through different dictionaries in the dictionary list
+            for (i = 0; i < dictionaries.length; i++) {
+                dictName = dictionaries[i]
+                keys = Object.keys(dictName)
+                for (j = 0; j < keys.length; j++) {
+                    transcript = transcript.replaceAll(keys[j], dictName[keys[j]])
+                }
+            }
+            return transcript
+        }
+
+        // Get access to user's microphone {audio:true}, if want video {camera:true}
+        navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+            // Log the stream onto the console
+            // console.log(stream)
+
+            // Return alert if media type is not supported
+            if (!MediaRecorder.isTypeSupported('audio/webm')) return alert('Browser not supported')
+            // Create instance of MediaRecorder
+            const mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' })
+            // Create websocket
+            var url = new URL('wss://api.deepgram.com/v1/listen');
+            url.searchParams.set('numerals', true);
+            const socket = new WebSocket(url, [
+                'token',
+                '3cae52d03dc0daef5f57c383f74bfd2ade6e4923',
+            ])
+
+            socket.onopen = () => {
+                mediaRecorder.addEventListener('dataavailable', event => {
+                    socket.send(event.data)
+                })
+                // Record and send data every 250 ms 
+                mediaRecorder.start(250)
+            }
+
+            socket.onmessage = message => {
+                const data = JSON.parse(message.data)
+                console.log(data)
+                // Transcript shows the process of transcribing speech, will show the sentences 
+                // getting longer and longer, repeating a few times
+                const transcript = data.channel.alternatives[0].transcript
+                // Only console logging when the phrase is final
+                if (transcript && data.is_final) {
+                    // Logging onto user console
+                    console.log(transcript)
+                    // Logging onto the html file
+                    newTranscript = speechReplace(transcript, dictionaries)
+                    document.querySelector('p').textContent += ' ' + newTranscript
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
