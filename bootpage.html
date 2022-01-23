@@ -137,7 +137,7 @@ symbols = { 'equals to': '=', 'equals': '=', 'equal': '=', 'plus': '+', 'minus':
             return newDict
         }
 
-        function speechReplace(transcript, dictionaries) {
+        function speechReplace(transcript, newDict) {
             // Iterate through different dictionaries in the dictionary list
             // for (i = 0; i < dictionaries.length; i++) {
             //     dictName = dictionaries[i]
@@ -194,6 +194,8 @@ symbols = { 'equals to': '=', 'equals': '=', 'equal': '=', 'plus': '+', 'minus':
             }
 
             socket.onmessage = message => {
+                document.querySelector('#status').textContent = 'Listening...   '
+
                 const data = JSON.parse(message.data)
                 console.log(data)
                 // Transcript shows the process of transcribing speech, will show the sentences 
@@ -205,8 +207,7 @@ symbols = { 'equals to': '=', 'equals': '=', 'equal': '=', 'plus': '+', 'minus':
                     console.log(transcript)
                     // Logging onto the html file
                     newTranscript = speechReplace(transcript, newDict)
-                    document.querySelector('#status').textContent = 'Connected'
-                    document.querySelector('p').textContent += ' ' + newTranscript
+                    document.querySelector('#transcript').textContent += ' ' + newTranscript
                 }
             }
         })
