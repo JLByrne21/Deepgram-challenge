@@ -2,7 +2,7 @@
 symbols = { 'equals to': '=', 'plus': '+', 'minus': '-', 'times': '* ', 'divide': '/' }
 brackets = { 'open bracket': '(', 'close bracket': ')' }
 // Caps greek 'Α  , Β , Γ , Δ , Ε , Ζ , Η , Θ , Ι , Κ , Λ , Μ , Ν , Ξ , Ο , Π , Ρ , Σ /ς, Τ , Υ , Φ , Χ , Ψ , and Ω '
-conversion_dict = {
+greeks = {
     'alpha': 'α',
     'beta': 'β',
     'gamma': 'γ',
@@ -27,13 +27,17 @@ conversion_dict = {
     'chi': 'χ',
     'psi': 'ψ',
     'omega': 'ω',
-    'plus': '+',
-    'minus': '-',
-    'divide': '/',
-    'times': '*'
+    'hello': 'hi'
 };
-// List of dictionaries
-dictionaries = [symbols, brackets]
+
+function mergeDict(dictionaries) {
+    newDict = {}
+    for (i = 0; i < dictionaries.length; i++) {
+        newDict = Object.assign({}, newDict, dictionaries[i])
+    }
+    console.log(newDict)
+    return newDict
+}
 
 function speechReplace(transcript, dictionaries) {
     // Iterate through different dictionaries in the dictionary list
@@ -46,3 +50,7 @@ function speechReplace(transcript, dictionaries) {
     }
     return transcript
 }
+
+// List of dictionaries
+dictionaries = [symbols, brackets, greeks]
+newDict = mergeDict(dictionaries)
