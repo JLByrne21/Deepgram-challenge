@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        .bg-1 {
+            background-color: #4b8075;
+            /* Green */
+            color: #ffffff;
+        }
+
+        .bg-2 {
+            background-color: #363636;
+            /* Dark Blue */
+            color: #fafafa;
+        }
+
+        .bg-3 {
+            background-color: #414040;
+            /* White */
+            color: #fafafa;
+        }
+    </style>
+
+    <link href='http://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+
+
+    <div class="container-fluid bg-1 text-center">
+        <h1>Voice to Maths converter</h1>
+    </div>
+
+
+<div class="container-fluid bg-2 text-center">
+    <div class="row">
+
+      <div class="col-sm-12">
+        <h3>Voice Input</h3>
+        <p id="status">disconnected</p>
+        <p id="transcript"></p>
+
+
+
+            </div>
+
+            <div>
+
+
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="container-fluid bg-2 text-center">
+
+        <input id="record" class="btn btn-success" value='Record' type="button" onclick="
+
+        flip = !flip;
+        console.log(flip)
+        record();
+    " />
+
+        <input type="button" class="btn btn-danger" value="Delete" onClick="Clean()" />
+    </div>
+
+
+<div class="container-fluid bg-3 text-center">
+      <div class="col-sm-12">
+        <h3>Maths Output</h3> 
+        <p id="transcript_editted"></p>
+
+      </div>
+     
+      
+      </div>
+</div>
+
+
+<!-- <div class="container-fluid bg-2 text-center">
+    <div class="col-sm-12">
+      <h3>LaTex</h3> 
+    </div>
+    </div>
+</div> -->
+
+
+<script>
+    flip = false;
+
+    
+    
+    
+
+    function record() {
+        document.querySelector('#status').textContent = ''
+
+// Different dictionaries for different purposes
+symbols = { 'equals to': '=', 'equals': '=', 'equal': '=', 'plus': '+', 'minus': '-', 'times': '* ', 'divide': '/', 'divided': '/' }
+        brackets = { 'open bracket': '(', 'close bracket': ')' }
+        // Caps greek 'Α  , Β , Γ , Δ , Ε , Ζ , Η , Θ , Ι , Κ , Λ , Μ , Ν , Ξ , Ο , Π , Ρ , Σ /ς, Τ , Υ , Φ , Χ , Ψ , and Ω '
+        greeks = {
+            'alpha': 'α',
+            'beta': 'β',
+            'gamma': 'γ',
+            'delta': 'δ',
+            'epsilon': 'ε',
+            'zeta': 'ζ',
+            'eta': 'η',
+            'theta': 'θ',
+            'iota': 'ι',
+            'kappa': 'κ',
+            'lambda': 'λ',
+            'mu': 'μ',
+            'nu': 'ν',
+            'xi': 'ξ',
+            'omicron': 'ο',
+            'pi': 'π',
+            'rho': 'ρ',
+            'sigma': 'σ',
+            'tau': 'τ',
+            'upsilon': 'υ',
+            'phi': 'φ',
+            'chi': 'χ',
+            'psi': 'ψ',
+            'omega': 'ω',
+            'hello': 'hi'
+        };
+
+        function mergeDict(dictionaries) {
+            newDict = {}
+            for (i = 0; i < dictionaries.length; i++) {
+                newDict = Object.assign({}, newDict, dictionaries[i])
+            }
+            console.log(newDict)
+            return newDict
+        }
+
+
+    <div class="container-fluid bg-2 text-center">
+        <div class="col-sm-6">
+            <h3>LaTex</h3>
+        </div>
+
+
+    </div>
+    </div>
+
+
+    <script>
+        flip = false;
+
+
+
+
+
+        function record() {
+            document.querySelector('#status').textContent = ''
+
+            // Different dictionaries for different purposes
+            symbols = { 'equals to': '=', 'equals': '=', 'equal': '=', 'plus': '+', 'minus': '-', 'times': '* ', 'divide': '/', 'divided': '/' }
+            brackets = { 'open bracket': '(', 'close bracket': ')' }
+            // Caps greek 'Α  , Β , Γ , Δ , Ε , Ζ , Η , Θ , Ι , Κ , Λ , Μ , Ν , Ξ , Ο , Π , Ρ , Σ /ς, Τ , Υ , Φ , Χ , Ψ , and Ω '
+            greeks = {
+                'alpha': 'α',
+                'beta': 'β',
+                'gamma': 'γ',
+                'delta': 'δ',
+                'epsilon': 'ε',
+                'zeta': 'ζ',
+                'eta': 'η',
+                'theta': 'θ',
+                'iota': 'ι',
+                'kappa': 'κ',
+                'lambda': 'λ',
+                'mu': 'μ',
+                'nu': 'ν',
+                'xi': 'ξ',
+                'omicron': 'ο',
+                'pi': 'π',
+                'rho': 'ρ',
+                'sigma': 'σ',
+                'tau': 'τ',
+                'upsilon': 'υ',
+                'phi': 'φ',
+                'chi': 'χ',
+                'psi': 'ψ',
+                'omega': 'ω',
+                'hello': 'hi'
+            };
+
+            function mergeDict(dictionaries) {
+                newDict = {}
+                for (i = 0; i < dictionaries.length; i++) {
+                    newDict = Object.assign({}, newDict, dictionaries[i])
+                }
+                console.log(newDict)
+                return newDict
+            }
+
+            function speechReplace(transcript, newDict) {
+                // Iterate through different dictionaries in the dictionary list
+                // for (i = 0; i < dictionaries.length; i++) {
+                //     dictName = dictionaries[i]
+                //     keys = Object.keys(dictName)
+                //     for (j = 0; j < keys.length; j++) {
+                //         transcript = transcript.replaceAll(keys[j], dictName[keys[j]])
+                //     }
+                // }
+                words = transcript.split(" ")
+                for (i = 0; i < words.length; i++) {
+                    if (words[i] in newDict) {
+                        words[i] = newDict[words[i]]
+                    }
+                    else if (!isNaN(Number(words[i]))) {
+                        words[i] = words[i]
+                    }
+                    else if (words[i].length == 1) {
+                        words[i] = words[i]
+                    }
+                    else {
+                        words[i] = ''
+                    }
+                }
+                return words.join('')
+            }
+
+            socket.onmessage = message => {
+                document.querySelector('#status').textContent = 'Listening...   '
+
+                const data = JSON.parse(message.data)
+                console.log(data)
+                // Transcript shows the process of transcribing speech, will show the sentences 
+                // getting longer and longer, repeating a few times
+                const transcript = data.channel.alternatives[0].transcript
+                // Only console logging when the phrase is final
+                if (transcript && data.is_final) {
+                    // Logging onto user console
+                    console.log(transcript)
+                    // Logging onto the html file
+                    document.querySelector('#transcript').textContent += transcript
+
+                    newTranscript = speechReplace(transcript, newDict)
+                    document.querySelector('#transcript_editted').textContent += ' ' + newTranscript
+                }
+
+    // clears transcript
+    function Clean(){
+        document.getElementById('transcript').innerHTML='';
+        document.getElementById('transcript_editted').innerHTML='';
+    }
+
+    </script>
+
+</body>
