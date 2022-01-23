@@ -31,25 +31,19 @@
 </head>
 
 <body>
-
-
     <div class="container-fluid bg-1 text-center">
         <h1>Voice to Maths converter</h1>
     </div>
 
-
     <div class="container-fluid bg-2 text-center">
         <div class="row">
+
             <div class="col-sm-12">
                 <h3>Voice Input</h3>
                 <p id="status">disconnected</p>
                 <p id="transcript"></p>
 
-
-
             </div>
-
-
         </div>
 
     </div>
@@ -66,35 +60,22 @@
         <input type="button" class="btn btn-danger" value="Delete" onClick="Clean()" />
     </div>
 
-
     <div class="container-fluid bg-3 text-center">
         <div class="col-sm-12">
             <h3>Maths Output</h3>
             <p id="transcript_editted"></p>
-
         </div>
-
-
     </div>
     </div>
 
-
-    <!-- <div class="container-fluid bg-2 text-center">
-        <div class="col-sm-12">
+    <div class="container-fluid bg-2 text-center">
+        <div class="col-sm-6">
             <h3>LaTex</h3>
         </div>
-
-
     </div>
-    </div> -->
-
 
     <script>
         flip = false;
-
-
-
-
 
         function record() {
             document.querySelector('#status').textContent = ''
@@ -136,7 +117,6 @@
                 for (i = 0; i < dictionaries.length; i++) {
                     newDict = Object.assign({}, newDict, dictionaries[i])
                 }
-                console.log(newDict)
                 return newDict
             }
 
@@ -151,15 +131,16 @@
                 return words.join('')
             }
 
-            // List of dictionaries
+            // clears transcript
+            function Clean() {
+                document.getElementById('transcript').innerHTML = '';
+                document.getElementById('transcript_editted').innerHTML = '';
+            }
+
             dictionaries = [symbols, brackets, greeks]
             newDict = mergeDict(dictionaries)
-
             // Get access to user's microphone {audio:true}, if want video {camera:true}
             navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-                // Log the stream onto the console
-                // console.log(stream)
-
                 // Return alert if media type is not supported
                 if (!MediaRecorder.isTypeSupported('audio/webm')) return alert('Browser not supported')
                 // Create instance of MediaRecorder
@@ -176,7 +157,6 @@
                     mediaRecorder.addEventListener('dataavailable', event => {
                         socket.send(event.data)
                     })
-                    // Record and send data every 250 ms 
                     mediaRecorder.start(250)
                 }
 
@@ -185,33 +165,17 @@
 
                     const data = JSON.parse(message.data)
                     console.log(data)
-                    // Transcript shows the process of transcribing speech, will show the sentences 
-                    // getting longer and longer, repeating a few times
                     const transcript = data.channel.alternatives[0].transcript
-                    // Only console logging when the phrase is final
-
                     if (transcript && data.is_final) {
-                        // Logging onto user console
                         console.log(transcript)
-                        // Logging onto the html file
-                        document.querySelector('#transcript').textContent += transcript
+                        document.querySelector('#transcript').textContent += ' ' + transcript
 
                         newTranscript = speechReplace(transcript, newDict)
                         document.querySelector('#transcript_editted').textContent += ' ' + newTranscript
                     }
+
                 }
             })
         }
-        //.then returns media stream
-
-
-        // clears transcript
-        function Clean() {
-            document.getElementById('transcript').innerHTML = '';
-            document.getElementById('transcript_editted').innerHTML = '';
-
-        }
-
     </script>
-
 </body>

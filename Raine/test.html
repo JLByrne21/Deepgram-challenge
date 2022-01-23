@@ -9,8 +9,53 @@
 </head>
 
 <body>
-    <p></p>
     <script src='test.js'></script>
+    <p id="status">Connection status will go here</p>
+    <p id="transcript">Deepgram transcript will go here</p>
+    <script>
+        navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+            console.log({ stream })
+            if (!MediaRecorder.isTypeSupported('audio/webm'))
+                return alert('Browser not supported')
+            const mediaRecorder = new MediaRecorder(stream, {
+                mimeType: 'audio/webm',
+            })
+            var keywords = "punctuate=true&numerals=true&keywords=alpha:9&keywords=beta:9&keywords=gamma:9&keywords=delta:9&keywords=epsilon:9&keywords=zeta:9&keywords=eta:9&keywords=theta:9&keywords=iota:9&keywords=kappa:9&keywords=lambda:9&keywords=mu:10&keywords=nu:10&keywords=xi:9&keywords=omicron:10&keywords=pi:9&keywords=rho:10&keywords=sigma:9&keywords=tau:9&keywords=upsilon:9&keywords=phi:9&keywords=omega:9&keywords=plus:9&keywords=minus:9&keywords=divide:9&times:9&keywords:open:8&keywords:bracket:8&keywords:close:8&";
+            var string_url = 'wss://api.deepgram.com/v1/listen?' + keywords
+            /*var url = new URL(string_url);*/
+            const socket = new WebSocket(string_url, [
+                'token',
+                '60534324e3c28d710039d2e2528cb3c917150854',
+            ])
+            socket.onopen = () => {
+                document.querySelector('#status').textContent = 'Connected'
+                console.log({ event: 'onopen' })
+                mediaRecorder.addEventListener('dataavailable', async (event) => {
+                    if (event.data.size > 0 && socket.readyState == 1) {
+                        socket.send(event.data)
+                    }
+                })
+                mediaRecorder.start(1000)
+            }
+            socket.onmessage = (message) => {
+                const received = JSON.parse(message.data)
+                const transcript = received.channel.alternatives[0].transcript
+                if (transcript && received.is_final) {
+                    console.log(transcript)
+                    newTranscript = speechReplace(transcript, newDict)
+                    document.querySelector('#transcript').textContent +=
+                        newTranscript + ' '
+                }
+            }
+            socket.onclose = () => {
+                console.log({ event: 'onclose' })
+            }
+
+            socket.onerror = (error) => {
+                console.log({ event: 'onerror', error })
+            }
+        })
+    </script>
 </body>
 
 </html>
