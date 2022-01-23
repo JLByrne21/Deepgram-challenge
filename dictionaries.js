@@ -43,6 +43,5 @@ greeks = {
     'phi': 'φ',
     'chi': 'χ',
     'psi': 'ψ',
-    'omega': 'ω',
-    'hello': 'hi'
+    'omega': 'ω'
 };
