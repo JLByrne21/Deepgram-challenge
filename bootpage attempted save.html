@@ -146,7 +146,7 @@
                 // Create instance of MediaRecorder
                 const mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' })
                 // Create websocket
-                var keywords = "punctuate=true&numerals=true&keywords=alpha:9&keywords=beta:9&keywords=gamma:9&keywords=delta:9&keywords=epsilon:9&keywords=zeta:9&keywords=eta:9&keywords=theta:9&keywords=iota:9&keywords=kappa:9&keywords=lambda:9&keywords=mu:10&keywords=nu:10&keywords=xi:9&keywords=omicron:10&keywords=pi:9&keywords=rho:10&keywords=sigma:9&keywords=tau:9&keywords=upsilon:9&keywords=phi:9&keywords=omega:9&keywords=plus:9&keywords=minus:9&keywords=divide:9&times:9&keywords:open:8&keywords:bracket:8&keywords:close:8&";
+                var keywords = "numerals=true&keywords=alpha:9&keywords=beta:9&keywords=gamma:9&keywords=delta:9&keywords=epsilon:9&keywords=zeta:9&keywords=eta:9&keywords=theta:9&keywords=iota:9&keywords=kappa:9&keywords=lambda:9&keywords=mu:10&keywords=nu:10&keywords=xi:9&keywords=omicron:10&keywords=pi:9&keywords=rho:10&keywords=sigma:9&keywords=tau:9&keywords=upsilon:9&keywords=phi:9&keywords=omega:9&keywords=plus:9&keywords=minus:9&keywords=divide:9&times:9&keywords:open:8&keywords:bracket:8&keywords:close:8&";
                 var string_url = 'wss://api.deepgram.com/v1/listen?' + keywords
                 const socket = new WebSocket(string_url, [
                     'token',
