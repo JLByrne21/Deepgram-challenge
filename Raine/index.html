@@ -120,6 +120,7 @@
                     console.log(transcript)
                     // Logging onto the html file
                     newTranscript = speechReplace(transcript, newDict)
+                    document.querySelector('#status').textContent = 'Connected'
                     document.querySelector('p').textContent += ' ' + newTranscript
                 }
             }

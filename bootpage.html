@@ -8,29 +8,34 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <style>
-    .bg-1 {
-      background-color: #4b8075; /* Green */
-      color: #ffffff;
-    }
-    .bg-2 {
-        background-color: #363636; /* Dark Blue */
-        color: #fafafa;
-    }
-    .bg-3 {
-        background-color: #414040; /* White */
-        color: #fafafa;
-  }
+        .bg-1 {
+            background-color: #4b8075;
+            /* Green */
+            color: #ffffff;
+        }
+
+        .bg-2 {
+            background-color: #363636;
+            /* Dark Blue */
+            color: #fafafa;
+        }
+
+        .bg-3 {
+            background-color: #414040;
+            /* White */
+            color: #fafafa;
+        }
     </style>
-    
+
     <link href='http://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
 </head>
 
 <body>
 
-  
-<div class="container-fluid bg-1 text-center">
-    <h1>Voice to Maths converter</h1>
-</div>
+
+    <div class="container-fluid bg-1 text-center">
+        <h1>Voice to Maths converter</h1>
+    </div>
 
 
 <div class="container-fluid bg-2 text-center">
@@ -43,28 +48,28 @@
 
 
 
-      </div>
+            </div>
 
-    <div>
-        
-    
-    
+            <div>
+
+
+
+            </div>
+        </div>
+
     </div>
-    </div>
 
-</div>
+    <div class="container-fluid bg-2 text-center">
 
-<div class="container-fluid bg-2 text-center">
-    
-    <input id="record" class="btn btn-success" value = 'Record' type="button" onclick="
+        <input id="record" class="btn btn-success" value='Record' type="button" onclick="
 
         flip = !flip;
         console.log(flip)
         record();
     " />
 
-    <input type="button" class="btn btn-danger" value="Delete" onClick="Clean()"/>
-</div>
+        <input type="button" class="btn btn-danger" value="Delete" onClick="Clean()" />
+    </div>
 
 
 <div class="container-fluid bg-3 text-center">
@@ -83,8 +88,6 @@
     <div class="col-sm-12">
       <h3>LaTex</h3> 
     </div>
-   
-    
     </div>
 </div> -->
 
@@ -140,60 +143,93 @@ symbols = { 'equals to': '=', 'equals': '=', 'equal': '=', 'plus': '+', 'minus':
             return newDict
         }
 
-        function speechReplace(transcript, newDict) {
-            // Iterate through different dictionaries in the dictionary list
-            // for (i = 0; i < dictionaries.length; i++) {
-            //     dictName = dictionaries[i]
-            //     keys = Object.keys(dictName)
-            //     for (j = 0; j < keys.length; j++) {
-            //         transcript = transcript.replaceAll(keys[j], dictName[keys[j]])
-            //     }
-            // }
-            words = transcript.split(" ")
-            for (i = 0; i < words.length; i++) {
-                if (words[i] in newDict) {
-                    words[i] = newDict[words[i]]
+
+    <div class="container-fluid bg-2 text-center">
+        <div class="col-sm-6">
+            <h3>LaTex</h3>
+        </div>
+
+
+    </div>
+    </div>
+
+
+    <script>
+        flip = false;
+
+
+
+
+
+        function record() {
+            document.querySelector('#status').textContent = ''
+
+            // Different dictionaries for different purposes
+            symbols = { 'equals to': '=', 'equals': '=', 'equal': '=', 'plus': '+', 'minus': '-', 'times': '* ', 'divide': '/', 'divided': '/' }
+            brackets = { 'open bracket': '(', 'close bracket': ')' }
+            // Caps greek 'Α  , Β , Γ , Δ , Ε , Ζ , Η , Θ , Ι , Κ , Λ , Μ , Ν , Ξ , Ο , Π , Ρ , Σ /ς, Τ , Υ , Φ , Χ , Ψ , and Ω '
+            greeks = {
+                'alpha': 'α',
+                'beta': 'β',
+                'gamma': 'γ',
+                'delta': 'δ',
+                'epsilon': 'ε',
+                'zeta': 'ζ',
+                'eta': 'η',
+                'theta': 'θ',
+                'iota': 'ι',
+                'kappa': 'κ',
+                'lambda': 'λ',
+                'mu': 'μ',
+                'nu': 'ν',
+                'xi': 'ξ',
+                'omicron': 'ο',
+                'pi': 'π',
+                'rho': 'ρ',
+                'sigma': 'σ',
+                'tau': 'τ',
+                'upsilon': 'υ',
+                'phi': 'φ',
+                'chi': 'χ',
+                'psi': 'ψ',
+                'omega': 'ω',
+                'hello': 'hi'
+            };
+
+            function mergeDict(dictionaries) {
+                newDict = {}
+                for (i = 0; i < dictionaries.length; i++) {
+                    newDict = Object.assign({}, newDict, dictionaries[i])
                 }
-                else if (!isNaN(Number(words[i]))) {
-                    words[i] = words[i]
-                }
-                else if (words[i].length == 1) {
-                    words[i] = words[i]
-                }
-                else {
-                    words[i] = ''
-                }
+                console.log(newDict)
+                return newDict
             }
-            return words.join('')
-        }
 
-        // List of dictionaries
-        dictionaries = [symbols, brackets, greeks]
-        newDict = mergeDict(dictionaries)
-
-        // Get access to user's microphone {audio:true}, if want video {camera:true}
-        navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-            // Log the stream onto the console
-            // console.log(stream)
-
-            // Return alert if media type is not supported
-            if (!MediaRecorder.isTypeSupported('audio/webm')) return alert('Browser not supported')
-            // Create instance of MediaRecorder
-            const mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' })
-            // Create websocket
-            var url = new URL('wss://api.deepgram.com/v1/listen');
-            url.searchParams.set('numerals', true);
-            const socket = new WebSocket(url, [
-                'token',
-                '3cae52d03dc0daef5f57c383f74bfd2ade6e4923',
-            ])
-
-            socket.onopen = () => {
-                mediaRecorder.addEventListener('dataavailable', event => {
-                    socket.send(event.data)
-                })
-                // Record and send data every 250 ms 
-                mediaRecorder.start(250)
+            function speechReplace(transcript, newDict) {
+                // Iterate through different dictionaries in the dictionary list
+                // for (i = 0; i < dictionaries.length; i++) {
+                //     dictName = dictionaries[i]
+                //     keys = Object.keys(dictName)
+                //     for (j = 0; j < keys.length; j++) {
+                //         transcript = transcript.replaceAll(keys[j], dictName[keys[j]])
+                //     }
+                // }
+                words = transcript.split(" ")
+                for (i = 0; i < words.length; i++) {
+                    if (words[i] in newDict) {
+                        words[i] = newDict[words[i]]
+                    }
+                    else if (!isNaN(Number(words[i]))) {
+                        words[i] = words[i]
+                    }
+                    else if (words[i].length == 1) {
+                        words[i] = words[i]
+                    }
+                    else {
+                        words[i] = ''
+                    }
+                }
+                return words.join('')
             }
 
             socket.onmessage = message => {
@@ -214,11 +250,6 @@ symbols = { 'equals to': '=', 'equals': '=', 'equal': '=', 'plus': '+', 'minus':
                     newTranscript = speechReplace(transcript, newDict)
                     document.querySelector('#transcript_editted').textContent += ' ' + newTranscript
                 }
-            }
-        })
-}
-    //.then returns media stream
-    
 
     // clears transcript
     function Clean(){
@@ -226,6 +257,6 @@ symbols = { 'equals to': '=', 'equals': '=', 'equal': '=', 'plus': '+', 'minus':
         document.getElementById('transcript_editted').innerHTML='';
     }
 
-</script>
+    </script>
 
 </body>
