@@ -40,7 +40,7 @@
 
     <div class="container-fluid bg-2 text-center">
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-12">
                 <h3>Voice Input</h3>
                 <p id="status">disconnected</p>
                 <p id="transcript"></p>
@@ -49,11 +49,7 @@
 
             </div>
 
-            <div>
-
-
-
-            </div>
+            
         </div>
 
     </div>
@@ -72,8 +68,10 @@
 
 
     <div class="container-fluid bg-3 text-center">
-        <div class="col-sm-6">
+        <div class="col-sm-12">
             <h3>Maths Output</h3>
+            <p id="transcript_editted"></p>
+
         </div>
 
 
@@ -81,14 +79,14 @@
     </div>
 
 
-    <div class="container-fluid bg-2 text-center">
-        <div class="col-sm-6">
+    <!-- <div class="container-fluid bg-2 text-center">
+        <div class="col-sm-12">
             <h3>LaTex</h3>
         </div>
 
 
     </div>
-    </div>
+    </div> -->
 
 
     <script>
@@ -207,12 +205,15 @@
                     // getting longer and longer, repeating a few times
                     const transcript = data.channel.alternatives[0].transcript
                     // Only console logging when the phrase is final
+
                     if (transcript && data.is_final) {
                         // Logging onto user console
                         console.log(transcript)
                         // Logging onto the html file
+                        document.querySelector('#transcript').textContent += transcript
+
                         newTranscript = speechReplace(transcript, newDict)
-                        document.querySelector('#transcript').textContent += ' ' + newTranscript
+                        document.querySelector('#transcript_editted').textContent += ' ' + newTranscript
                     }
                 }
             })
@@ -223,6 +224,8 @@
         // clears transcript
         function Clean() {
             document.getElementById('transcript').innerHTML = '';
+            document.getElementById('transcript_editted').innerHTML = '';
+
         }
 
     </script>
