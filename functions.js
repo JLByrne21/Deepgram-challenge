@@ -16,7 +16,7 @@ function speechReplace(transcript, newDict) {
     }
     return words.join('')
 }
-
+var mySocket = []
 function record() {
     document.querySelector('#status').textContent = ''
     navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
@@ -28,6 +28,7 @@ function record() {
             'token',
             '3cae52d03dc0daef5f57c383f74bfd2ade6e4923',
         ])
+        mySocket.push(socket)
 
         socket.onopen = () => {
             mediaRecorder.addEventListener('dataavailable', event => {
@@ -50,6 +51,13 @@ function record() {
             }
         }
     })
+}
+
+function stopRecording() {
+    // for (var s in mySocket) {
+    //     s.close()
+    // }
+    mySocket[0].close();
 }
 
 // clears transcript
