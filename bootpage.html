@@ -37,17 +37,35 @@
     <div class="row">
       <div class="col-sm-6">
         <h3>Voice Input</h3>
+        <p id="status">disconnected</p>
+        <p id="transcript"></p>
+
+
+
       </div>
 
     <div>
-        <button type="button" class="btn btn-default">Record</button>
-        <button type="button" class="btn btn-default">Delete</button>
+        
     
     
     </div>
     </div>
 
 </div>
+
+<div class="container-fluid bg-2 text-center">
+    
+    <input id="record" class="btn btn-success" value = 'Record' type="button" onclick="
+
+        flip = !flip;
+        console.log(flip)
+        record();
+    " />
+
+    <input type="button" class="btn btn-danger" value="Delete" onClick="Clean()"/>
+</div>
+
+
 <div class="container-fluid bg-3 text-center">
       <div class="col-sm-6">
         <h3>Maths Output</h3> 
@@ -58,6 +76,84 @@
 </div>
 
 
+<div class="container-fluid bg-2 text-center">
+    <div class="col-sm-6">
+      <h3>LaTex</h3> 
+    </div>
+   
+    
+    </div>
+</div>
 
+
+<script>
+    flip = false;
+
+    
+    
+    
+
+    function record() {
+
+    document.querySelector('#status').textContent = ''
+    navigator.mediaDevices.getUserMedia({audio:true}).then(stream =>{
+    if (!MediaRecorder.isTypeSupported('audio/webm'))
+        return alert('Browser not supported')
+    
+    
+    const mediaRecorder = new MediaRecorder(stream, {mimeType:'audio/webm'})
+
+    var url = new URL('wss://api.deepgram.com/v1/listen');
+    url.searchParams.set('numerals', true);
+
+    const socket = new WebSocket(url,[
+        'token',
+        'bf85239279cd7e971e9d0793692d468d9b3f981c',
+    
+    ])
+
+        
+        if(flip == false){
+            console.log('stop')
+            
+        }
+
+        socket.onopen = () => {
+            mediaRecorder.addEventListener('dataavailable', event => {
+                socket.send(event.data)
+            })
+            mediaRecorder.start(250)
+        }
+
+        
+
+        
+
+        socket.onmessage = message => {
+            const data = JSON.parse(message.data)
+            const transcript = data.channel.alternatives[0].transcript
+            console.log(transcript)
+            if(transcript && data.is_final){
+
+            document.querySelector('#status').textContent = 'Connected'
+
+            document.querySelector('#transcript').textContent += transcript + ' '
+            }
+        }
+        
+    
+
+
+    })
+}
+    //.then returns media stream
+    
+
+    // clears transcript
+    function Clean(){
+        document.getElementById('transcript').innerHTML='';
+    }
+
+</script>
 
 </body>
